@@ -1,0 +1,58 @@
+---
+title: "WhatsApp Group Size Engagement Analysis"
+format: html
+---
+
+```{python}
+# Imports
+import pandas as pd
+```
+```{python}
+
+# You are a Product Analyst on the WhatsApp team investigating group messaging dynamics. Your team wants to understand how large groups are being used and their messaging patterns. You'll leverage data to uncover insights about group participation and communication behaviors.
+
+# Question 1 of 3
+
+# What is the maximum number of participants among WhatsApp groups that were created in October 2024? This metric will help us understand the largest group size available.
+
+# pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: dim_groups
+# Please print your final result or dataframe
+
+# Solution:
+
+# Filter groups created in October 2024
+oct_groups = dim_groups[
+    (dim_groups['created_date'].dt.year == 2024) &
+    (dim_groups['created_date'].dt.month == 10)
+]
+
+# Maximum participant count
+max_participants = oct_groups['participant_count'].max()
+print("Maximum participants in Oct 2024 groups:", max_participants)
+
+```
+
+```{python}
+# Question 2 of 3
+# What is the average number of participants in WhatsApp groups that were created in October 2024? This number will indicate the typical group size and inform our group messaging feature considerations.
+
+# Solution:
+# Mean on October 2024 subset
+avg_participants = oct_groups['participant_count'].mean()
+print("Average number of participants in Oct 2024 groups:", avg_participants)
+```
+
+```{python}
+# Question 3 of 3
+# For WhatsApp groups with more than 50 participants that were created in October 2024, what is the average number of messages sent? This insight will help assess engagement in larger groups and support recommendations for group messaging features.
+
+# Solution:
+# Create filtered dataframe
+large_groups = oct_groups[oct_groups['participant_count'] > 50]
+
+# Calculate average message count
+avg_messages = large_groups['total_messages'].mean()
+
+print("Average messages in Oct 2024 groups with >50 participants:", avg_messages)
+```
