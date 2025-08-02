@@ -4,10 +4,10 @@
 
 ### Daily Learning Snapshot
 
-| Day | Topic | Library/Tool Used | Difficulty Level |
-|------|---------------------------|--------------------|-----------|
+| Day | Topic | Library Used | Difficulty Level |
+|------|--------------------------|------------------------|------------|
 | 1 | WhatsApp Group Size Engagement Analysis | pandas (EDA, data manipulation) | Easy |
-| 2 |  |  |  |
+| 2 | Sponsored Posts Click Performance | pandas (data manipulation) | Medium |
 | 3 |  |  |  |
 | … |  |  |  |
 | 15 |  |  |  |
