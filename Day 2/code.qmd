@@ -1,0 +1,103 @@
+---
+title: "Sponsored Posts Click Performance"
+format: html
+---
+
+```{python}
+ #You are a Product Analyst on the Amazon Sponsored Advertising team investigating sponsored product ad engagement across electronics categories. Your team wants to understand CTR variations to optimize targeted advertising strategies.
+
+# Question 1 of 3
+
+# What is the average click-through rate (CTR) for sponsored product ads for each product category that contains the substring 'Electronics' in its name during October 2024? This analysis will help determine which electronics-related categories are performing optimally.
+
+# Tables:
+# fct_ad_performance(ad_id, product_id, clicks, impressions, recorded_date)
+# dim_product(product_id, product_category, product_name)
+
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: fct_ad_performance, dim_product
+# Please print your final result or dataframe
+
+# Solution:
+# Merge ad performance with product details
+merged_df = pd.merge(
+    fct_ad_performance,
+    dim_product,
+    on='product_id',
+    how='inner'
+)
+
+# Filter for October 2024 ads & ‘Electronics ‘
+oct_electronics_df = merged_df[
+    (merged_df['recorded_date'].dt.year == 2024) &
+    (merged_df['recorded_date'].dt.month == 10) &    (merged_df['product_category'].str.contains('Electronics', case=False, na=False))
+]
+
+# Calculate CTR for each ad
+oct_electronics_df['CTR'] = oct_electronics_df['clicks'] / oct_electronics_df['impressions']
+
+# Group by product category and compute average CTR
+category_summary = oct_electronics_df.groupby('product_category')['CTR'].mean().reset_index()
+
+print(category_summary)
+
+```
+
+```{python}
+
+```
+
+```{python}
+# Question 2 of 3
+
+# Which product categories have a CTR greater than the aggregated overall average CTR for sponsored product ads during October 2024? This analysis will identify high-performing categories for further optimization. For this question, we want to calculate CTR for each ad, then get the average across ads by product category & overall.
+
+#Solutions:
+# Merge ad performance with product details
+merged_df = pd.merge(
+    fct_ad_performance,
+    dim_product,
+    on='product_id',
+    how='inner'
+)
+
+# Filter for October 2024
+oct_df = merged_df[
+    (merged_df['recorded_date'].dt.year == 2024) &
+    (merged_df['recorded_date'].dt.month == 10)
+]
+
+# Calculate CTR per ad
+oct_df['CTR'] = oct_df['clicks'] / oct_df['impressions']
+
+# Calculate overall average CTR across all ads
+overall_ctr = oct_df['CTR'].mean()
+
+# Group by product category and calculate average CTR per category
+category_ctr_df = oct_df.groupby('product_category')['CTR'].mean().reset_index()
+
+# Filter categories with average CTR greater than overall average CTR
+high_ctr_categories = category_ctr_df[
+    category_ctr_df['CTR'] > overall_ctr
+]
+
+# Output the high-performing categories
+print(high_ctr_categories)
+
+```
+
+```{python}
+# Question 3 of 3
+# For the product categories identified in the previous question, what is the percentage difference between their CTR and the overall average CTR for October 2024? This analysis will quantify the performance gap to recommend specific categories for targeted advertising optimization.
+
+# Calculate percentage difference for high-performing categories
+high_ctr_categories['Percentage_Diff'] = (
+    (high_ctr_categories['CTR'] - overall_ctr) / overall_ctr * 100
+).round(2)
+
+# Display the results
+print("CTR Performance Gap for Top Categories:")
+print(high_ctr_categories[['product_category', 'CTR', 'Percentage_Diff']])
+
+
+```
