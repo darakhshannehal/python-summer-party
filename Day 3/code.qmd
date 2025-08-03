@@ -1,0 +1,117 @@
+---
+title: "Disney Parks Guest Spending Behavior"
+format: html
+---
+```{python}
+# You are a data analyst working with the Disney Parks revenue team to understand nuanced guest spending patterns across different park experiences. The team wants to develop a comprehensive view of visitor purchasing behaviors. Your goal is to uncover meaningful insights that can drive personalized marketing strategies.
+
+# Question 1 of 3
+
+# What is the average spending per guest per visit for each park experience type during July 2024? Ensure that park experience types with no recorded transactions are shown with an average spending of 0.0. This analysis helps establish baseline spending differences essential for later segmentation.
+
+# fct_guest_spending(guest_id, visit_date, park_experience_type, amount_spent)
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: fct_guest_spending
+# Please print your final result or dataframe
+
+# Hint: when calculating the average spending per guest per visit, are you averaging the total spending per guest per visit first, then averaging across guests? Or are you directly averaging all transactions per experience type? The question wants the average spending per guest per visit for each experience type.
+
+# Solution:
+
+# Filter for July 2024 visits
+july_data = fct_guest_spending[
+    (fct_guest_spending['visit_date'].dt.month == 7) &
+    (fct_guest_spending['visit_date'].dt.year == 2024)
+]
+
+# Aggregate total spending per guest per visit per experience type
+grouped_df = july_data.groupby(
+    ['park_experience_type', 'guest_id', 'visit_date'],
+    as_index=False
+)['amount_spent'].sum()
+
+# Calculate average of these visit-level totals per experience type
+avg_spending = grouped_df.groupby('park_experience_type', as_index=False)['amount_spent'].mean()
+
+# Ensure all experience types are included — even those with no July visits
+all_types = fct_guest_spending[['park_experience_type']].drop_duplicates()
+all_types['park_experience_type'] = all_types['park_experience_type'].astype(str)
+avg_spending['park_experience_type'] = avg_spending['park_experience_type'].astype(str)
+
+# Merge and fill missing types with 0.0
+final_result = pd.merge(all_types, avg_spending, on='park_experience_type', how='left')
+final_result['amount_spent'] = final_result['amount_spent'].fillna(0.0).round(2)
+
+# Print the result
+print(final_result)
+```
+
+```{python}
+# Question 2 of 3
+# For guests who visited our parks more than once in August 2024, what is the difference in spending between their first and their last visit? This investigation, using sequential analysis, will reveal any shifts in guest spending behavior over multiple visits.
+
+# Filter for August 2024 visits
+aug_data = fct_guest_spending[
+    (fct_guest_spending['visit_date'].dt.month == 8) &
+    (fct_guest_spending['visit_date'].dt.year == 2024)
+]
+
+# Identify guests with more than one visit
+multi_visit_guests = aug_data.groupby('guest_id')['visit_date'].nunique()
+multi_visit_guests = multi_visit_guests[multi_visit_guests > 1].index
+
+# Filter dataset to only include repeat visitors
+repeat_visits_df = aug_data[aug_data['guest_id'].isin(multi_visit_guests)]
+
+# Sort and compute first and last visit spending
+repeat_visits_df = repeat_visits_df.sort_values(['guest_id', 'visit_date'])
+
+spending_diff_df = repeat_visits_df.groupby('guest_id').agg(
+    first_spend=('amount_spent', 'first'),
+    last_spend=('amount_spent', 'last')
+).reset_index()
+
+# Calculate spending difference
+spending_diff_df['spending_difference'] = (
+    spending_diff_df['last_spend'] - spending_diff_df['first_spend']
+)
+
+```
+
+```{python}
+# Question 3 of 3
+# In September 2024, how can guests be categorized into distinct spending segments such as Low, Medium, and High based on their total spending? Use the following thresholds for categorization:
+-Low: Includes values from $0 up to, but not including, $50.
+-Medium: Includes values from $50 up to, but not including, $100.
+-High: Includes values from $100 and above.
+Exclude guests who did not make any purchases in the period.
+
+# Solutions
+# Filter for September 2024 visits
+sep_data = fct_guest_spending[
+    (fct_guest_spending['visit_date'].dt.month == 9) &
+    (fct_guest_spending['visit_date'].dt.year == 2024)
+]
+# Aggregate total spending per guest
+guest_spending = sep_data.groupby('guest_id')['amount_spent'].sum().reset_index()
+
+# Exclude guests with zero spending
+guest_spending = guest_spending[guest_spending['amount_spent'] > 0]
+
+# Categorize using pd.cut()
+bins = [0, 50, 100, float('inf')]
+labels = ['Low', 'Medium', 'High']
+
+guest_spending['spending_segment'] = pd.cut(
+    guest_spending['amount_spent'],
+    bins=bins,
+    labels=labels,
+    right=False  # ensures boundaries are inclusive of the lower limit
+)
+
+# Final result: Display guest ID, total spending, and segment
+final_segmented_df = guest_spending[['guest_id', 'amount_spent', 'spending_segment']]
+
+# View the DataFrame
+print(final_segmented_df.head())
+```
