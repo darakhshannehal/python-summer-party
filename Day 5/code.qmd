@@ -1,0 +1,94 @@
+---
+title: "Switch 2 Pre-sales Demand Forecasting"
+format: html
+---
+
+```{python}
+
+# You are a Product Analyst working with the Nintendo Switch 2 pre-sales team to analyze regional pre-order patterns and customer segmentation. Your team needs to understand how different demographics influence pre-sale volumes across regions. You will leverage historical pre-sale transaction data to extract meaningful insights that can guide marketing strategies.
+
+# Question 1 of 3
+
+# What percentage of records have missing values in at least one column? Handle the missing values, so that we have a cleaned dataset to work with.
+
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: pre_sale_data
+# Please print your final result or dataframe
+# pre_sale_data(customer_id, region, demographic_group, pre_order_date, pre_order_quantity)
+
+# Clean the data
+# Copy original data
+pre_sale_clean_df = pre_sale_data.copy()
+
+# Percentage of records with missing values
+missing_rows = pre_sale_clean_df.isnull().any(axis=1)
+missing_count = missing_rows.sum()
+total_count = len(pre_sale_clean_df)
+missing_percentage = (missing_count / total_count) * 100
+print(f"Percentage of records with missing values: {missing_percentage:.2f}%")
+
+# Drop rows where critical fields are missing
+pre_sale_clean_df.dropna(subset=['customer_id', 'region', 'pre_order_quantity'], inplace=True)
+
+# Fill less critical missing values
+pre_sale_clean_df['demographic_group'].fillna('Unknown', inplace=True)
+pre_sale_clean_df['pre_order_date'].fillna('Unknown', inplace=True)  # Or use a placeholder date
+
+# Remove duplicate records
+duplicate_count = pre_sale_clean_df.duplicated().sum()
+print(f"Number of duplicate records: {duplicate_count}")
+pre_sale_clean_df.drop_duplicates(inplace=True)
+
+# Question 2 of 3 
+# Using the cleaned data, calculate the total pre-sale orders per month for each region and demographic group.
+
+# Create 'month' column as pandas Period
+pre_sale_clean_df['month'] = pd.to_datetime(
+    pre_sale_clean_df['pre_order_date'], errors='coerce'
+).dt.to_period('M')
+
+# Group by region, demographic group, and month
+grouped_df = pre_sale_clean_df.groupby(
+    ['region', 'demographic_group', 'month']
+)['pre_order_quantity'].sum().reset_index()
+
+# Pivot so months become columns
+total_pre_sale_per_month = grouped_df.pivot_table(
+    index=['region', 'demographic_group'],
+    columns='month',
+    values='pre_order_quantity',
+    aggfunc='sum',
+    fill_value=0
+).reset_index()
+
+# Preview the final result
+print(total_pre_sale_per_month.head())
+
+# Question 3 of 3
+# Predict the total pre-sales quantity for each region for September 2024. Assume that the growth rate from August to September, is the same as the growth rate from July to August in each region.
+
+# Filter for July and August 2024 data
+monthly_data = pre_sale_clean_df.copy()
+monthly_data['month'] = pd.to_datetime(monthly_data['pre_order_date'], errors='coerce').dt.to_period('M')
+
+# Group by region and month to calculate total quantity
+region_monthly = monthly_data.groupby(['region', 'month'])['pre_order_quantity'].sum().reset_index()
+
+# Extract July and August data
+july_data = region_monthly[region_monthly['month'] == pd.Period('2024-07')]
+aug_data = region_monthly[region_monthly['month'] == pd.Period('2024-08')]
+
+# Merge July and August for growth rate calculation
+merged = pd.merge(july_data, aug_data, on='region', suffixes=('_july', '_aug'))
+
+# Calculate growth rate
+merged['growth_rate'] = (merged['pre_order_quantity_aug'] - merged['pre_order_quantity_july']) / merged['pre_order_quantity_july']
+
+# Predict September quantity
+merged['predicted_sep_2024'] = merged['pre_order_quantity_aug'] * (1 + merged['growth_rate'])
+
+# Final output: region and predicted quantity
+prediction_df = merged[['region', 'predicted_sep_2024']]
+print(prediction_df)
+
+```
