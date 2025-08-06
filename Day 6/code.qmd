@@ -2,7 +2,6 @@
 title: "Ice Cream Sales Seasonal Performance Assessment"
 format: html
 ---
-
 ```{python}
 #You are a Product Insights Analyst working with the Ben & Jerry's sales strategy team to investigate seasonal sales patterns through comprehensive data analysis. The team wants to understand how temperature variations and uniQue transaction characteristics impact ice cream sales volume. Your goal is to perform detailed data cleaning and exploratory analysis to uncover meaningful insights about seasonal sales performance.
 
@@ -89,9 +88,4 @@ outliers = monthly_sales_df[(monthly_sales_df < lower_bound) | (monthly_sales_df
 # Print outlier months
 print("Outlier months based on IQR method:")
 print(outliers)
-```
-
-```{python}
-# Extra: If you want to visualize these outliers, a boxplot grouped by month would be a great next step to confirm your findings visually.
-
 ```
