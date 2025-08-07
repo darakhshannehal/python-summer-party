@@ -12,5 +12,6 @@
 | 4 | Search Results Page: User Interaction Patterns | pandas (data cleaning, aggregation, sorting) | Easy |
 | 5 | Switch 2 Pre-sales Demand Forecasting | pandas (cleaning, pivot, time series, forecasting) | Hard |
 | 6 | Ice Cream Sales Seasonal Performance Assessment | pandas (drop_duplicates, pd.cut, pivot_table, IQR outlier detection) | Hard |
+| 7 | Celebrity Product Drops Sales Performance Analysis |  | Easy |
 | ...... |  |  |  |
 | 15 |  |  |  |
