@@ -1,0 +1,73 @@
+---
+title: "Lululemon: Payment Method Impact on Athleisure Online Sales"
+format: html
+---
+```{python}
+# You are a Product Analyst for the Lululemon Online Store team investigating how alternative payment methods might influence sales performance. The team wants to understand the potential impact of introducing a new installment payment option. Your analysis will predict sales lift and customer conversion for the proposed payment method.
+
+# Question 1 of 3
+# Between April 1st and June 30th, 2025, what is the count of transactions for each payment method? This analysis will establish the baseline distribution of how customers currently pay.
+
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: fct_transactions
+# fct_transactions(transaction_id, customer_id, payment_method, order_value, transaction_date)
+# Please print your final result or dataframe
+
+# Solution
+# Filter data between April 1st and June 30th, 2025
+df = (fct_transactions['transaction_date'] >= '2025-04-01') & \
+       (fct_transactions['transaction_date'] <= '2025-06-30') 
+filtered_df = fct_transactions[df]
+
+# Group by payment method and count transactions
+transaction_counts = filtered_df.groupby('payment_method').size().reset_index(name='transaction_count')
+
+# Print result
+print(transaction_counts)
+```
+
+```{python}
+# Question 2 of 3
+# Between April 1st and June 30th, 2025, what is the average order value for each payment method? This metric will help us assess which payment methods are tied to higher spending levels.
+
+# Solutions
+# Group by payment method and average order value
+avg_order_value = filtered_df.groupby('payment_method')['order_value'].mean().reset_index(name='avg_order_value')
+
+# Print result
+print(avg_order_value)
+```
+
+```{python}
+# Question 3 of 3   
+
+# Between April 1st and June 30th, 2025, what would be the predicted sales lift if a 'pay over time' option were introduced? Assume that 20% of customers using credit cards switch to this option and that their average order value increases by 15%. This calculation will directly inform the expected impact on overall sales performance.
+
+# Filter data between April 1st and June 30th, 2025
+df = (fct_transactions['transaction_date'] >= '2025-04-01') & \
+     (fct_transactions['transaction_date'] <= '2025-06-30') 
+filtered_df = fct_transactions[df]
+
+# For credit card transactions only
+credit_card_df = filtered_df[filtered_df['payment_method'] == 'credit_card']
+
+# For unique credit card customers
+unique_credit_card_customers = credit_card_df['customer_id'].nunique()
+
+# Calculate number of switching customers (20% of unique credit card customers)
+switching_customers = int(0.20 * unique_credit_card_customers)
+
+# Calculate average order value for credit card users
+credit_card_avg_order = credit_card_df['order_value'].mean()
+
+# Calculate increase in revenue per switching customer (15% lift)
+increase_per_customer = credit_card_avg_order * 0.15
+
+# Calculate total predicted sales lift
+predicted_sales_lift = switching_customers * increase_per_customer
+
+# Print results
+print(f"Predicted conversion (switching customers): {switching_customers:,}")
+print(f"Predicted sales lift from 'pay over time': ${predicted_sales_lift:,.2f}")
+
+```
