@@ -1,0 +1,57 @@
+---
+title: "Meta: Instagram Stories Daily User Creation Patterns"
+format: html
+---
+```{python}
+# You are a Product Analyst on the Instagram Stories team investigating story creation patterns. The team wants to understand the distribution of stories created by users daily. You will analyze user storytelling behavior to optimize engagement strategies.
+
+# Question 1 of 3
+# Take a look at the data in the story_date column. Correct any data type inconsistencies in that column.
+
+# stories_data(user_id, story_date, story_count)
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: stories_data
+# Please print your final result or dataframe
+
+# Solution
+# Convert story_date to datetime format, coercing errors to NaT
+stories_data["story_date"] = pd.to_datetime(stories_data["story_date"], errors="coerce")
+# Display the corrected DataFrame
+print(stories_data)
+
+# Question 2 of 3
+# Calculate the 25th, 50th, and 75th percentiles of the number of stories created per user per day.
+
+# Solution
+# Group by user and date to get daily story counts
+daily_counts = stories_data.groupby(["user_id", "story_date"])["story_count"].sum().reset_index()
+
+# Calculate percentiles
+Q25 = daily_counts["story_count"].quantile(0.25)
+Q50 = daily_counts["story_count"].quantile(0.50)
+Q75 = daily_counts["story_count"].quantile(0.75)
+
+print("25th Percentile:", Q25)
+print("50th Percentile (Median):", Q50)
+print("75th Percentile:", Q75)
+
+# Question 3 of 3
+# What percentage of users have had at least one day, where they posted more than 10 stories on that day?
+
+# Solution
+# Filter for days with more than 10 stories
+high_activity = stories_data[stories_data['story_count'] > 10]
+
+# Get unique users who posted >10 stories
+users_with_high_activity = high_activity['user_id'].unique()
+
+# Total number of unique users
+total_users = stories_data['user_id'].nunique()
+
+# Calculate percentage
+percentage = (len(users_with_high_activity) / total_users) * 100
+
+# Print result
+print(f"Percentage of users who posted more than 10 stories on at least one day: {percentage:.2f}%")
+
+```
