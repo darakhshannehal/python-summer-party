@@ -14,5 +14,6 @@
 | 6 | Ice Cream Sales Seasonal Performance Assessment | pandas (drop_duplicates, pd.cut, pivot_table, IQR outlier detection) | Hard |
 | 7 | Celebrity Product Drops Sales Performance Analysis | pandas (filtering, missing values, grouping, sorting) | Easy |
 | 8 | Lululemon: Payment Method Impact on Athleisure Online Sales | pandas (groupby, filtering, customer-level simulation) | Medium |
+| 9 | Meta: Instagram Stories Daily User Creation Patterns | pandas (groupby, filtering, quantiles) | Medium |
 | ....... |  |  |  |
 | 15 |  |  |  |
