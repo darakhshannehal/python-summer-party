@@ -5,7 +5,7 @@
 ### Daily Learning Snapshot
 
 | Day | Topic | Library used | Difficulty Level |
-|----------|--------------------------|------------------|------------------|
+|-----------------|----------------------|-----------------|-----------------|
 | 1 | WhatsApp Group Size Engagement Analysis | pandas (EDA, data manipulation) | Easy |
 | 2 | Sponsored Posts Click Performance | pandas (data manipulation) | Medium |
 | 3 | Disney Parks Guest Spending Behavior | pandas (groupby, sequential logic, binning) | Hard |
