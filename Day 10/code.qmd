@@ -1,0 +1,75 @@
+---
+title: "Apple: App Store Ratings Performance by App Category"
+format: html
+---
+
+```{python}
+# You are a Product Analyst for the Apple App Store team investigating app ratings data. Your focus is to clean and understand rating distributions across different app categories. The team wants to leverage basic statistical insights to guide app performance strategies.
+
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: app_ratings
+# app_ratings(app_id, category, rating, review_date)
+# Please print your final result or dataframe
+
+# Question 1 of 3
+# There are some data inconsistencies in the 'rating' column, specifically: leading or trailing white space, decimals represented by commas instead of decimal points (eg. 4,2 instead of 4.2), and non-numeric values. Clean up these data issues and convert the column to a numeric data type.
+
+# Solution
+# Clean 'rating' column in app_ratings
+app_ratings['rating'] = (
+    app_ratings['rating']
+    .astype(str)                      # Ensure all values are strings
+    .str.strip()                      # Remove leading/trailing whitespace
+    .str.replace(',', '.', regex=False)  # Replace comma with decimal point
+)
+# Convert to numeric, set errors='coerce' to handle non-numeric entries
+app_ratings['rating'] = pd.to_numeric(app_ratings['rating'], errors='coerce')
+
+# Preview cleaned data
+print(app_ratings.head())
+
+```
+
+```{python}
+# Question 2 of 3
+# Using the cleaned dataset, display the first and last five entries to get an overview of the app ratings across different categories.
+
+# Solution
+# Sort by review_date before previewing
+app_ratings_sorted = app_ratings.sort_values('review_date')
+print("First five by review_date:")
+print(app_ratings_sorted.head())
+print("\nLast five by review_date:")
+print(app_ratings_sorted.tail())
+```
+
+```{python}
+# Question 3 of 3
+# Calculate the basic summary statistics (mean, median, standard deviation) of app ratings for each category to identify variations and performance patterns.
+
+# Solution
+print(app_ratings['rating'].dtype)  # Should show: float64
+# Clean string formatting
+app_ratings['rating'] = (
+    app_ratings['rating']
+    .astype(str)
+    .str.strip()
+    .str.replace(',', '.', regex=False)
+)
+# Convert to numeric
+app_ratings['rating'] = pd.to_numeric(app_ratings['rating'], errors='coerce')
+
+# Confirm dtype
+print("Rating dtype:", app_ratings['rating'].dtype)  # Should now be float64
+
+# Group and calculate stats
+category_stats = app_ratings.groupby('category')['rating'].agg(
+    mean_rating='mean',
+    median_rating='median',
+    std_rating='std'
+).reset_index()
+
+# Step 5: Display results
+print("\nSummary statistics by category:")
+print(category_stats)
+```
