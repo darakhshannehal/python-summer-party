@@ -15,5 +15,6 @@
 | 7 | Nike: Celebrity Product Drops Sales Performance Analysis | pandas (filtering, missing values, grouping, sorting) | Easy |
 | 8 | Lululemon: Payment Method Impact on Athleisure Online Sales | pandas (groupby, filtering, customer-level simulation) | Medium |
 | 9 | Meta: Instagram Stories Daily User Creation Patterns | pandas (groupby, filtering, quantiles) | Medium |
+| 10 | Apple: App Store Ratings Performance by App Category | pandas (string cleaning, type conversion, groupby stats) | Easy |
 | ....... |  |  |  |
 | 15 |  |  |  |
