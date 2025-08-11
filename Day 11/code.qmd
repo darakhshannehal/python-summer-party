@@ -1,0 +1,97 @@
+---
+title: "Stripe: Payment Fraud Risk Detection in Online Transactions"
+format: html
+---
+
+```{python}
+
+# You are a data analyst in Stripe's risk management team investigating transaction patterns to identify potential fraud. The team needs to develop a systematic approach to screen transactions for financial risks. Your goal is to create an initial risk assessment methodology using transaction characteristics.
+
+# fct_transactions(transaction_id, transaction_date, customer_email, transaction_amount, fraud_detection_score)
+# dim_risk_flags(risk_flag_id, transaction_id, risk_level)
+
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: fct_transactions, dim_risk_flags
+# Please print your final result or dataframe
+
+# Question 1 of 3
+#How many transactions in October 2024 have a customer email ending with a domain other than 'gmail.com', 'yahoo.com', or 'hotmail.com'? This metric will help us identify transactions associated with less common email providers that may indicate emerging risk patterns.
+
+# Solution
+# Filter for October 2024
+oct_df = fct_transactions[
+    (fct_transactions['transaction_date'].dt.year == 2024) &
+    (fct_transactions['transaction_date'].dt.month == 10)
+]
+
+# Extract domain from email
+oct_df['email_domain'] = oct_df['customer_email'].str.extract(r'@([\w\.-]+)$')
+
+# Filter out common domains
+common_domains = ['gmail.com', 'yahoo.com', 'hotmail.com']
+less_common_df = oct_df[~oct_df['email_domain'].isin(common_domains)]
+
+# Count transactions
+transaction_count = len(less_common_df)
+
+# Print result
+print("Transactions with less common email domains in October 2024:", transaction_count)
+
+```
+
+```{python}
+# Question 2 of 3
+# For transactions occurring in November 2024, what is the average transaction amount, using 0 as a default for any missing values? This calculation will help us detect abnormal transaction amounts that could be related to fraudulent activity.
+
+# Solution
+# Filter for November 2024
+nov_df = fct_transactions[
+    (fct_transactions['transaction_date'].dt.year == 2024) &
+    (fct_transactions['transaction_date'].dt.month == 11)
+]
+
+# Fill missing values using .loc
+nov_df.loc[:, 'transaction_amount'] = nov_df['transaction_amount'].fillna(0)
+
+# Calculate average transaction amount
+avg_amount = nov_df['transaction_amount'].mean()
+
+# Print result
+print("Average transaction amount in November 2024 (missing values treated as 0):", avg_amount)
+
+```
+
+```{python}
+# Question 3 of 3
+#Among transactions flagged as 'High' risk in December 2024, which day of the week recorded the highest number of such transactions? This analysis is intended to pinpoint specific days with concentrated high-risk activity and support the development of our preliminary fraud detection score.
+
+# Solution
+ # Merge risk level into transactions
+merged_df = fct_transactions.merge(
+    dim_risk_flags,
+    on='transaction_id',
+    how='left'
+)
+
+# Filter for December 2024
+dec_df = merged_df[
+    (merged_df['transaction_date'].dt.year == 2024) &
+    (merged_df['transaction_date'].dt.month == 12)
+].copy()
+
+# Filter for 'High' risk transactions
+high_risk_df = dec_df[dec_df['risk_level'] == 'High'].copy()
+
+# Extract day of the week
+high_risk_df['day_of_week'] = high_risk_df['transaction_date'].dt.day_name()
+
+# Count transactions per day
+day_counts = high_risk_df['day_of_week'].value_counts()
+
+# Identify the day with the highest count
+top_day = day_counts.idxmax()
+top_count = day_counts.max()
+
+# Print result
+print(f"The day with the highest number of 'High' risk transactions in December 2024 is {top_day} with {top_count} transactions.")
+```
