@@ -5,7 +5,7 @@
 ### Daily Learning Snapshot
 
 | Day | Topic | Library used | Difficulty Level |
-|------------------|-------------------|------------------|------------------|
+|---------|----------------------|-------------------------|------------------|
 | 1 | WhatsApp Group Size Engagement Analysis | pandas (EDA, data manipulation) | Easy |
 | 2 | Amazon: Sponsored Posts Click Performance | pandas (data manipulation) | Medium |
 | 3 | Disney Parks Guest Spending Behavior | pandas (groupby, sequential logic, binning) | Hard |
@@ -17,6 +17,6 @@
 | 9 | Meta: Instagram Stories Daily User Creation Patterns | pandas (groupby, filtering, quantiles) | Medium |
 | 10 | Apple: App Store Ratings Performance by App Category | pandas (string cleaning, type conversion, groupby stats) | Easy |
 | 11 | Stripe: Payment Fraud Risk Detection in Online Transactions | pandas (date filtering, string splitting, missing value handling, merge, weekday extraction) | Medium |
-| 12 | Walmart: E-commerce Returns Customer Segmentation Model | pandas (datetime conversion, boolean filtering MultiIndex creation, pd.Grouper, .size() ) | Medium |
+| 12 | Walmart: E-commerce Returns Customer Segmentation Model | pandas (datetime conversion, boolean filtering, MultiIndex creation, pd.Grouper, .size() ) | Medium |
 | ....... |  |  |  |
 | 15 |  |  |  |
