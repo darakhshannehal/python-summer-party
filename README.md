@@ -17,5 +17,6 @@
 | 9 | Meta: Instagram Stories Daily User Creation Patterns | pandas (groupby, filtering, quantiles) | Medium |
 | 10 | Apple: App Store Ratings Performance by App Category | pandas (string cleaning, type conversion, groupby stats) | Easy |
 | 11 | Stripe: Payment Fraud Risk Detection in Online Transactions | pandas (date filtering, string splitting, missing value handling, merge, weekday extraction) | Medium |
+| 12 | Walmart: E-commerce Returns Customer Segmentation Model | pandas (datetime conversion, boolean filtering MultiIndex creation, pd.Grouper, .size() ) | Medium |
 | ....... |  |  |  |
 | 15 |  |  |  |
