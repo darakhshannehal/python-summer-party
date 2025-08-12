@@ -1,0 +1,63 @@
+---
+title: "Walmart: E-commerce Returns Customer Segmentation Model"
+format: html
+---
+```{python}
+
+# You are a Data Analyst on the Walmart.com Insights team investigating customer return patterns. The team aims to develop a predictive approach to understanding customer return behaviors across different time periods. Your goal is to leverage transaction data to create a comprehensive view of customer return likelihood.
+
+# The following tables are loaded as pandas DataFrames with the same names: customer_returns
+#customer_returns(customer_id, order_id, order_date, return_flag, order_amount)
+
+# Note: pandas and numpy are already imported as pd and np
+# Please print your final result or dataframe
+
+# Question 1 of 2
+#Identify and list all unique customer IDs who have made returns between July 1st 2024 and June 30th 2025. This will help us understand the base set of customers involved in returns during the specified period.
+
+# Solution
+customer_returns['order_date'].dtype # Check data type
+
+# Convert 'order_date' to datetime format 
+customer_returns['order_date'] = pd.to_datetime(customer_returns['order_date'], errors='coerce')
+
+# Filter for returned orders in the specified date range (between July 1st 2024 and June 30th 2025)
+returned_df = customer_returns[
+    (customer_returns['return_flag'] == True) & 
+    (customer_returns['order_date'] >= '2024-07-01') & 
+    (customer_returns['order_date'] <= '2025-06-30')
+]
+
+# Extract unique customer IDs
+unique_customers = returned_df['customer_id'].dropna().unique()
+# Print the result
+print("Unique customers who made returns between July 1st 2024 and June 30th 2025:")
+print(unique_customers)
+
+```
+
+```{python}
+
+# Question 2 of 3
+# Convert the 'order_date' column to a datetime format and create a MultiIndex with 'customer_id' and 'order_date'. Then, calculate the total number of returns per customer for each month. This will provide insights into monthly return patterns for each customer.
+
+# Solution
+# Convert 'order_date' to datetime format
+customer_returns['order_date'] = pd.to_datetime(customer_returns['order_date'], errors='coerce')
+
+# Create MultiIndex with 'customer_id' and 'order_date'
+df = customer_returns.set_index(['customer_id', 'order_date'])
+
+# Filter for returned orders
+returned_df = df[df['return_flag'] == True]
+
+# Group by customer and monthly period using pd.Grouper
+monthly_returns = returned_df.groupby([
+    'customer_id',
+    pd.Grouper(level='order_date', freq='M')
+]).size()
+
+# Print result
+print("Monthly return counts per customer:")
+print(monthly_returns)
+```
