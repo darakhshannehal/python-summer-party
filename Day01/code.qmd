@@ -2,8 +2,8 @@
 title: "WhatsApp Group Size Engagement Analysis"
 format: html
 ---
-
 ```{python}
+
 # You are a Product Analyst on the WhatsApp team investigating group messaging dynamics. Your team wants to understand how large groups are being used and their messaging patterns. You'll leverage data to uncover insights about group participation and communication behaviors.
 
 # Question 1 of 3
@@ -14,7 +14,12 @@ format: html
 # The following tables are loaded as pandas DataFrames with the same names: dim_groups
 # Please print your final result or dataframe
 
-# Solution:
+# Solution
+# Libraries
+import pandas as pd
+
+# Load Data
+dim_groups = pd.read_csv('day01_dim_groups.csv')
 
 # Filter groups created in October 2024
 oct_groups = dim_groups[
