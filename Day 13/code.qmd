@@ -1,0 +1,75 @@
+---
+title: "Shake Shack: New Milkshake Flavor Selection for Launch"
+format: html
+---
+
+```{python}
+
+# You are a Product Analyst working with the Shake Shack R&D team to evaluate customer ratings for experimental milkshake flavors. Your team has collected ratings data from a small sampling test. Your task is to systematically analyze and clean the ratings data to identify top-performing flavors.
+
+# Note: pandas and numpy are already imported as pd and np
+# The following tables are loaded as pandas DataFrames with the same names: milkshake_ratings
+# milkshake_ratings(customer_id, flavor, rating, rating_date)
+# Please print your final result or dataframe
+
+# Question 1 of 3
+# There was an error in our data collection process, and we unknowingly introduced duplicate rows into our data. Remove any duplicate entries in the customer ratings data to ensure the accuracy of the analysis.
+
+# Solution
+
+# Libraries
+import pandas as pd
+# Load Data
+milkshake_ratings = pd.read_csv('day13_milkshake_ratings.csv')
+print("Original shape:", milkshake_ratings.shape)
+
+# Create cleaned version
+cleaned_ratings = milkshake_ratings.drop_duplicates()
+
+# Print result
+print("Cleaned shape:", cleaned_ratings.shape)
+print("Deduplicated DataFrame preview:")
+print(cleaned_ratings.head())
+
+```
+
+```{python}
+# Question 2 of 3
+# For each milkshake flavor, calculate the average customer rating and append this as a new column to the milkshake_ratings DataFrame. Don't forget to clean the DataFrame first by dropping duplicate values.
+
+# Solution
+# Drop duplicates
+cleaned_ratings = milkshake_ratings.drop_duplicates()
+
+# Calculate average rating per flavor
+avg_rating_per_flavor = cleaned_ratings.groupby('flavor')['rating'].mean()
+
+# Append the avg_rating_per_flavor to cleaned_ratings
+cleaned_ratings['rating_per_flavor'] = cleaned_ratings['flavor'].map(avg_rating_per_flavor)
+
+# Print result
+print("Milkshake ratings with average rating per flavor:")
+print(cleaned_ratings.head())
+
+```
+```{python}
+# Question 3 of 3
+# For each row in the dataset, calculate the difference between that customer's rating and the average rating for the flavor. Don't forget to clean the DataFrame first by dropping duplicate values.
+
+# Solution
+# Drop duplicates
+cleaned_ratings = milkshake_ratings.drop_duplicates()
+
+# Calculate average rating per flavor
+avg_rating_per_flavor = cleaned_ratings.groupby('flavor')['rating'].mean()
+
+# Map average rating to each row
+cleaned_ratings['rating_per_flavor'] = cleaned_ratings['flavor'].map(avg_rating_per_flavor)
+
+# Calculate difference between customer's rating and flavor average
+cleaned_ratings['rating_diff'] = cleaned_ratings['rating'] - cleaned_ratings['rating_per_flavor']
+
+# Print result
+print("Milkshake ratings with rating difference per flavor:")
+print(cleaned_ratings.head())
+```
