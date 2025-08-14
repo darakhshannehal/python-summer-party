@@ -18,6 +18,16 @@ format: html
 # The following tables are loaded as pandas DataFrames with the same names: fct_ad_performance, dim_product
 # Please print your final result or dataframe
 
+# Libraries
+import pandas as pd
+
+# Load Datasets
+fct_ad_performance = pd.read_csv('day02_fct_ad_performance.csv')
+dim_product = pd.read_csv('day02_dim_product.csv')
+
+# Ensure 'recorded_date' is a datetime type
+fct_ad_performance['recorded_date'] = pd.to_datetime(fct_ad_performance['recorded_date'])
+
 # Solution:
 # Merge ad performance with product details
 merged_df = pd.merge(

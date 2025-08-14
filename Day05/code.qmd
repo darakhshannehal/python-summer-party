@@ -7,48 +7,58 @@ format: html
 
 # You are a Product Analyst working with the Nintendo Switch 2 pre-sales team to analyze regional pre-order patterns and customer segmentation. Your team needs to understand how different demographics influence pre-sale volumes across regions. You will leverage historical pre-sale transaction data to extract meaningful insights that can guide marketing strategies.
 
-# Question 1 of 3
-
-# What percentage of records have missing values in at least one column? Handle the missing values, so that we have a cleaned dataset to work with.
-
 # Note: pandas and numpy are already imported as pd and np
 # The following tables are loaded as pandas DataFrames with the same names: pre_sale_data
 # Please print your final result or dataframe
 # pre_sale_data(customer_id, region, demographic_group, pre_order_date, pre_order_quantity)
 
-# Clean the data
-# Copy original data
-pre_sale_clean_df = pre_sale_data.copy()
+# Question 1 of 3
+
+# What percentage of records have missing values in at least one column? Handle the missing values, so that we have a cleaned dataset to work with.
+
+# Solution 
+# Libraries
+import pandas as pd
+
+# Load Data
+pre_sale_data = pd.read_csv('day05_pre_sale_data.csv')
+
+# Ensure 'pre_order_date' is a datetime type
+pre_sale_data['pre_order_date'] = pd.to_datetime(pre_sale_data['pre_order_date'])
 
 # Percentage of records with missing values
-missing_rows = pre_sale_clean_df.isnull().any(axis=1)
+missing_rows = pre_sale_data.isnull().any(axis=1)
 missing_count = missing_rows.sum()
-total_count = len(pre_sale_clean_df)
+total_count = len(pre_sale_data)
 missing_percentage = (missing_count / total_count) * 100
 print(f"Percentage of records with missing values: {missing_percentage:.2f}%")
 
 # Drop rows where critical fields are missing
-pre_sale_clean_df.dropna(subset=['customer_id', 'region', 'pre_order_quantity'], inplace=True)
+pre_sale_data.dropna(subset=['customer_id', 'region', 'pre_order_quantity'], inplace=True)
 
 # Fill less critical missing values
-pre_sale_clean_df['demographic_group'].fillna('Unknown', inplace=True)
-pre_sale_clean_df['pre_order_date'].fillna('Unknown', inplace=True)  # Or use a placeholder date
+pre_sale_data['demographic_group'].fillna('Unknown', inplace=True)
+pre_sale_data['pre_order_date'].fillna('Unknown', inplace=True)  # Or use a placeholder date
 
 # Remove duplicate records
-duplicate_count = pre_sale_clean_df.duplicated().sum()
+duplicate_count = pre_sale_data.duplicated().sum()
 print(f"Number of duplicate records: {duplicate_count}")
-pre_sale_clean_df.drop_duplicates(inplace=True)
+pre_sale_data.drop_duplicates(inplace=True)
 
+
+```
+
+```{python}
 # Question 2 of 3 
 # Using the cleaned data, calculate the total pre-sale orders per month for each region and demographic group.
 
 # Create 'month' column as pandas Period
-pre_sale_clean_df['month'] = pd.to_datetime(
-    pre_sale_clean_df['pre_order_date'], errors='coerce'
+pre_sale_data['month'] = pd.to_datetime(
+    pre_sale_data['pre_order_date'], errors='coerce'
 ).dt.to_period('M')
 
 # Group by region, demographic group, and month
-grouped_df = pre_sale_clean_df.groupby(
+grouped_df = pre_sale_data.groupby(
     ['region', 'demographic_group', 'month']
 )['pre_order_quantity'].sum().reset_index()
 
@@ -63,12 +73,14 @@ total_pre_sale_per_month = grouped_df.pivot_table(
 
 # Preview the final result
 print(total_pre_sale_per_month.head())
+```
 
+```{python}
 # Question 3 of 3
 # Predict the total pre-sales quantity for each region for September 2024. Assume that the growth rate from August to September, is the same as the growth rate from July to August in each region.
 
 # Filter for July and August 2024 data
-monthly_data = pre_sale_clean_df.copy()
+monthly_data = pre_sale_data.copy()
 monthly_data['month'] = pd.to_datetime(monthly_data['pre_order_date'], errors='coerce').dt.to_period('M')
 
 # Group by region and month to calculate total quantity
@@ -90,5 +102,4 @@ merged['predicted_sep_2024'] = merged['pre_order_quantity_aug'] * (1 + merged['g
 # Final output: region and predicted quantity
 prediction_df = merged[['region', 'predicted_sep_2024']]
 print(prediction_df)
-
 ```

@@ -21,6 +21,9 @@ import pandas as pd
 # Load Data
 dim_groups = pd.read_csv('day01_dim_groups.csv')
 
+# Ensure 'created_date' is a datetime type
+dim_groups['created_date'] = pd.to_datetime(dim_groups['created_date'])
+
 # Filter groups created in October 2024
 oct_groups = dim_groups[
     (dim_groups['created_date'].dt.year == 2024) &

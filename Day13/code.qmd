@@ -16,12 +16,15 @@ format: html
 # There was an error in our data collection process, and we unknowingly introduced duplicate rows into our data. Remove any duplicate entries in the customer ratings data to ensure the accuracy of the analysis.
 
 # Solution
-
 # Libraries
 import pandas as pd
+
 # Load Data
 milkshake_ratings = pd.read_csv('day13_milkshake_ratings.csv')
 print("Original shape:", milkshake_ratings.shape)
+
+# Ensure 'rating_date' is a datetime type
+milkshake_ratings['rating_date'] = pd.to_datetime(milkshake_ratings['rating_date'])
 
 # Create cleaned version
 cleaned_ratings = milkshake_ratings.drop_duplicates()
@@ -52,6 +55,7 @@ print("Milkshake ratings with average rating per flavor:")
 print(cleaned_ratings.head())
 
 ```
+
 ```{python}
 # Question 3 of 3
 # For each row in the dataset, calculate the difference between that customer's rating and the average rating for the flavor. Don't forget to clean the DataFrame first by dropping duplicate values.

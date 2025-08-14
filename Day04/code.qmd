@@ -5,7 +5,8 @@ format: html
 
 ```{python}
 
-#You are a Product Analyst on the Google Search team investigating user engagement with search result pages. The team wants to understand how different numbers of search results impact user interaction time. Your analysis will help optimize the current search results presentation strategy.
+# You are a Product Analyst on the Google Search team investigating user engagement with search result pages. The team wants to understand how different numbers of search results impact user interaction time. Your analysis will help optimize the current search results presentation strategy.
+
 # Note: pandas and numpy are already imported as pd and np
 # The following tables are loaded as pandas DataFrames with the same names: user_engagement_data
 # Please print your final result or dataframe
@@ -17,18 +18,34 @@ format: html
 # Identify and remove any duplicate entries in the dataset to ensure data quality. How many duplicates were found and removed?
 
 # Solution
+
+# Libraries
+import pandas as pd
+
+# Load Data
+user_engagement_data = pd.read_csv('day04_user_engagement_data.csv')
+
+# Ensure 'interaction_date' is a datetime type
+user_engagement_data['interaction_date'] = pd.to_datetime(user_engagement_data['interaction_date'])
+
 # Count duplicate rows
-num_duplicates = df.duplicated().sum()
+num_duplicates = user_engagement_data.duplicated().sum()
 
 # Remove duplicate rows
-df_cleaned = df.drop_duplicates()
-Question 2 of 3
+user_engagement_data_cleaned = user_engagement_data.drop_duplicates()
+
+```
+
+```{python}
+# Question 2 of 3
 
 # After dropping duplicates, aggregate the data to find the average user interaction time for each number of search results displayed per page. What are the average interaction times?
 
 # Solution
-grouped_df = df_cleaned.groupby('search_results_displayed')['interaction_time'].mean()
+grouped_df = user_engagement_data_cleaned.groupby('search_results_displayed')['interaction_time'].mean()
+```
 
+```{python}
 # Question 3 of 3
 # Sort the aggregated results from Q2 to determine which number of search results per page has the highest average user interaction time. What is the optimal number of search results per page?
 
@@ -38,5 +55,4 @@ sorted_df = grouped_df.sort_values(ascending=False)
 
 # Optimal number of search results
 optimal_count = sorted_df.index[0]
-
 ```

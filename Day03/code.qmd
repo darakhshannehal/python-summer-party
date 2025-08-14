@@ -18,6 +18,15 @@ format: html
 
 # Solution:
 
+# Libraries
+import pandas as pd
+
+# Load Data
+fct_guest_spending = pd.read_csv('day03_fct_guest_spending.csv')
+
+# Ensure 'visit_date' is a datetime type
+fct_guest_spending['visit_date'] = pd.to_datetime(fct_guest_spending['visit_date'])
+
 # Filter for July 2024 visits
 july_data = fct_guest_spending[
     (fct_guest_spending['visit_date'].dt.month == 7) &
@@ -79,12 +88,13 @@ spending_diff_df['spending_difference'] = (
 ```
 
 ```{python}
+
 # Question 3 of 3
 # In September 2024, how can guests be categorized into distinct spending segments such as Low, Medium, and High based on their total spending? Use the following thresholds for categorization:
--Low: Includes values from $0 up to, but not including, $50.
--Medium: Includes values from $50 up to, but not including, $100.
--High: Includes values from $100 and above.
-Exclude guests who did not make any purchases in the period.
+# -Low: Includes values from $0 up to, but not including, $50.
+# -Medium: Includes values from $50 up to, but not including, $100.
+# -High: Includes values from $100 and above.
+# Exclude guests who did not make any purchases in the period.
 
 # Solutions
 # Filter for September 2024 visits
@@ -92,6 +102,7 @@ sep_data = fct_guest_spending[
     (fct_guest_spending['visit_date'].dt.month == 9) &
     (fct_guest_spending['visit_date'].dt.year == 2024)
 ]
+
 # Aggregate total spending per guest
 guest_spending = sep_data.groupby('guest_id')['amount_spent'].sum().reset_index()
 
