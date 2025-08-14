@@ -1,0 +1,80 @@
+---
+title: "Starbucks: Loyalty Program's Impact on Transaction Patterns"
+format: html
+---
+
+```{python}
+# You are a Business Analyst on the Starbucks Rewards team investigating customer transaction behavior. Your team wants to understand how loyalty program membership influences purchasing patterns. The goal is to compare transaction metrics between loyalty members and non-members.
+
+# # The following tables are loaded as pandas DataFrames with the same names: fct_transactions, dim_customers
+# fct_transactions(transaction_id, customer_id, transaction_date, transaction_value)
+# dim_customers(customer_id, is_loyalty_member)
+
+# Please print your final result or dataframe
+
+# Question 1 of 3
+# For the month of July 2024, how many transactions did loyalty program members and non-members make? Compare the transaction counts between these two groups.
+
+# Solution
+# Libraries
+import pandas as pd
+
+# Load Datasets
+fct_transactions = pd.read_csv('day14_fct_transactions.csv')
+dim_customers = pd.read_csv('day14_dim_customers.csv')
+
+# Ensure 'transaction_date' is a datetime type
+fct_transactions['transaction_date'] = pd.to_datetime(fct_transactions['transaction_date'])
+
+# Merge transactions with customer loyalty info
+merged_df = fct_transactions.merge(dim_customers, on='customer_id', how='left')
+
+# Filter for July 2024
+july_df = merged_df[
+    (merged_df['transaction_date'].dt.year == 2024) &
+    (merged_df['transaction_date'].dt.month == 7)
+]
+
+# Group by loyalty membership and count transactions
+transaction_counts = july_df.groupby('is_loyalty_member')['transaction_id'].count().reset_index()
+
+# print result
+print(transaction_counts)
+
+```
+
+```{python}
+
+# Question 2 of 3
+#  What is the average transaction value for loyalty program members and non-members during July 2024? Use this to identify which group has a higher average transaction value.
+
+# Solution
+# Group by loyalty membership and calculate average transaction value
+avg_transaction_value = july_df.groupby('is_loyalty_member')['transaction_value'].mean().reset_index()
+
+# Print result
+print(avg_transaction_value)
+
+```
+
+```{python}
+
+# Question 3 of 3
+# Determine the percentage difference in average transaction value between loyalty program members and non-members for July 2024.
+
+# Solution
+# Group by loyalty membership and calculate average transaction value
+avg_transaction_value = july_df.groupby('is_loyalty_member')['transaction_value'].mean().reset_index()
+avg_transaction_value.rename(columns={'transaction_value': 'avg_transaction_value'}, inplace=True)
+
+# Extract values
+loyalty_avg = avg_transaction_value.loc[avg_transaction_value['is_loyalty_member'] == True, 'avg_transaction_value'].values[0]
+non_loyalty_avg = avg_transaction_value.loc[avg_transaction_value['is_loyalty_member'] == False, 'avg_transaction_value'].values[0]
+
+# Calculate percentage difference
+percent_diff = ((loyalty_avg - non_loyalty_avg) / non_loyalty_avg) * 100
+
+# Print result
+print(f"Percentage difference in average transaction value: {percent_diff:.2f}%")
+
+```
