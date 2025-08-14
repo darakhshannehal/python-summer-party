@@ -14,10 +14,24 @@ format: html
 # Please print your final result or dataframe
 
 # Solution
+# Libraries
+import pandas as pd
+
+# Load Data
+stories_data = pd.read_csv('day09_stories_data.csv')
+
+# Ensure 'pre_order_date' is a datetime type
+stories_data['story_date'] = pd.to_datetime(stories_data['story_date'])
+
 # Convert story_date to datetime format, coercing errors to NaT
 stories_data["story_date"] = pd.to_datetime(stories_data["story_date"], errors="coerce")
-# Display the corrected DataFrame
+
+# Print result
 print(stories_data)
+
+```
+
+```{python}
 
 # Question 2 of 3
 # Calculate the 25th, 50th, and 75th percentiles of the number of stories created per user per day.
@@ -35,6 +49,9 @@ print("25th Percentile:", Q25)
 print("50th Percentile (Median):", Q50)
 print("75th Percentile:", Q75)
 
+```
+
+```{python}
 # Question 3 of 3
 # What percentage of users have had at least one day, where they posted more than 10 stories on that day?
 

@@ -8,12 +8,20 @@ format: html
 # Question 1 of 3
 # Between April 1st and June 30th, 2025, what is the count of transactions for each payment method? This analysis will establish the baseline distribution of how customers currently pay.
 
-# Note: pandas and numpy are already imported as pd and np
 # The following tables are loaded as pandas DataFrames with the same names: fct_transactions
 # fct_transactions(transaction_id, customer_id, payment_method, order_value, transaction_date)
 # Please print your final result or dataframe
 
 # Solution
+# Libraries
+import pandas as pd
+
+# Load Data
+fct_transactions = pd.read_csv('day08_fct_transactions.csv')
+
+# Ensure 'pre_order_date' is a datetime type
+fct_transactions['transaction_date'] = pd.to_datetime(fct_transactions['transaction_date'])
+
 # Filter data between April 1st and June 30th, 2025
 df = (fct_transactions['transaction_date'] >= '2025-04-01') & \
        (fct_transactions['transaction_date'] <= '2025-06-30') 

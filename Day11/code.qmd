@@ -7,17 +7,27 @@ format: html
 
 # You are a data analyst in Stripe's risk management team investigating transaction patterns to identify potential fraud. The team needs to develop a systematic approach to screen transactions for financial risks. Your goal is to create an initial risk assessment methodology using transaction characteristics.
 
+# The following tables are loaded as pandas DataFrames with the same names: fct_transactions, dim_risk_flags
 # fct_transactions(transaction_id, transaction_date, customer_email, transaction_amount, fraud_detection_score)
 # dim_risk_flags(risk_flag_id, transaction_id, risk_level)
 
-# Note: pandas and numpy are already imported as pd and np
-# The following tables are loaded as pandas DataFrames with the same names: fct_transactions, dim_risk_flags
 # Please print your final result or dataframe
 
 # Question 1 of 3
 #How many transactions in October 2024 have a customer email ending with a domain other than 'gmail.com', 'yahoo.com', or 'hotmail.com'? This metric will help us identify transactions associated with less common email providers that may indicate emerging risk patterns.
 
 # Solution
+# Libraries
+import pandas as pd
+
+# Load Datasets
+fct_transactions = pd.read_csv('day11_fct_transactions.csv')
+
+dim_risk_flags = pd.read_csv('day11_dim_risk_flags.csv')
+
+# Ensure 'pre_order_date' is a datetime type
+fct_transactions['transaction_date'] = pd.to_datetime(fct_transactions['transaction_date'])
+
 # Filter for October 2024
 oct_df = fct_transactions[
     (fct_transactions['transaction_date'].dt.year == 2024) &

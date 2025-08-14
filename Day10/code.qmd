@@ -6,15 +6,24 @@ format: html
 ```{python}
 # You are a Product Analyst for the Apple App Store team investigating app ratings data. Your focus is to clean and understand rating distributions across different app categories. The team wants to leverage basic statistical insights to guide app performance strategies.
 
-# Note: pandas and numpy are already imported as pd and np
 # The following tables are loaded as pandas DataFrames with the same names: app_ratings
 # app_ratings(app_id, category, rating, review_date)
+
 # Please print your final result or dataframe
 
 # Question 1 of 3
 # There are some data inconsistencies in the 'rating' column, specifically: leading or trailing white space, decimals represented by commas instead of decimal points (eg. 4,2 instead of 4.2), and non-numeric values. Clean up these data issues and convert the column to a numeric data type.
 
 # Solution
+# Libraries
+import pandas as pd
+
+# Load Data
+app_ratings = pd.read_csv('day10_app_ratings.csv')
+
+# Ensure 'pre_order_date' is a datetime type
+app_ratings['review_date'] = pd.to_datetime(app_ratings['review_date'])
+
 # Clean 'rating' column in app_ratings
 app_ratings['rating'] = (
     app_ratings['rating']
@@ -69,7 +78,7 @@ category_stats = app_ratings.groupby('category')['rating'].agg(
     std_rating='std'
 ).reset_index()
 
-# Step 5: Display results
+# Display results
 print("\nSummary statistics by category:")
 print(category_stats)
 ```
