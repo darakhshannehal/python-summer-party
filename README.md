@@ -5,7 +5,7 @@
 ### Daily Learning Snapshot
 
 | Day | Topic | Library used | Difficulty Level |
-|------------|------------------|-----------------------------|------------|
+|--------------|-----------------------------------|--------------------------------------|---------------|
 | 1 | WhatsApp Group Size Engagement Analysis | pandas (EDA, data manipulation) | Easy |
 | 2 | Amazon: Sponsored Posts Click Performance | pandas (data manipulation) | Medium |
 | 3 | Disney Parks Guest Spending Behavior | pandas (groupby, sequential logic, binning) | Hard |
@@ -19,5 +19,5 @@
 | 11 | Stripe: Payment Fraud Risk Detection in Online Transactions | pandas (date filtering, string splitting, missing value handling, merge, weekday extraction) | Medium |
 | 12 | Walmart: E-commerce Returns Customer Segmentation Model | pandas (datetime conversion, boolean filtering, MultiIndex creation, pd.Grouper, .size() ) | Medium |
 | 13 | Shake Shack: New Milkshake Flavor Selection for Launch | pandas (drop_duplicates, groupby, mean, map, difference calculation) | Medium |
-| ....... |  |  |  |
+| 14 | Starbucks: Loyalty Program's Impact on Transaction Patterns | pandas (merge, datetime filtering, groupby mean, percentage difference calculation) | Hard |
 | 15 |  |  |  |
