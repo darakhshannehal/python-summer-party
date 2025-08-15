@@ -1,0 +1,82 @@
+---
+title: "Uber: UberPool Driver Earnings Optimization Strategies"
+format: html
+---
+
+# You are a Business Analyst on the Uber Pool Product Team working to optimize driver compensation. The team aims to understand how trip characteristics impact driver earnings. Your goal is to develop data-driven recommendations that maximize driver earnings potential.
+```{python}
+
+# Question 1 of 3
+# What is the average driver earnings per completed UberPool ride with more than two riders between July 1st and September 30th, 2024? This analysis will help isolate trips that meet specific rider thresholds to understand their impact on driver earnings.
+
+ # Solution
+# Libraries
+import pandas as pd
+
+# Load Data
+fct_trips = pd.read_csv('day15_fct_trips.csv')
+
+# Filter UberPool rides with more than 2 riders between July 1 and Sept 30, 2024
+filtered_df = fct_trips[
+    (fct_trips['ride_type'] == "UberPool") &
+    (fct_trips['rider_count'] > 2) &
+    (fct_trips['trip_date'] >= '2024-07-01') & 
+    (fct_trips['trip_date'] <= '2024-09-30')
+]
+# Calculate average earnings
+avg_earning = filtered_df['total_earnings'].mean()
+
+# Print final result
+print("Average earnings per UberPool ride with >2 riders (Jul–Sep 2024): ₹", round(avg_earning, 2))
+
+```
+
+```{python}
+# Question 2 of 3
+# For completed UberPool rides between July 1st and September 30th, 2024, derive a new column calculating earnings per mile (total_earnings divided by total_distance) and then compute the average earnings per mile for rides with more than two riders. This calculation will reveal efficiency metrics for driver compensation.
+
+ # Solution
+# Filter UberPool rides between July 1 and Sept 30, 2024
+filtered_df = fct_trips[
+    (fct_trips['ride_type'] == "UberPool") &
+    (fct_trips['trip_date'] >= '2024-07-01') & 
+    (fct_trips['trip_date'] <= '2024-09-30')
+]
+# Add new column for earnings per mile
+filtered_df['earnings_per_mile'] = filtered_df['total_earnings'] / filtered_df['total_distance']
+
+# Filter rides with more than two riders
+df = filtered_df[filtered_df['rider_count'] > 2]
+
+# Compute average earnings per mile
+avg_earning_per_mile = df['earnings_per_mile'].mean()
+
+# Final result
+print("Average earnings per mile for UberPool rides with >2 riders (Jul–Sep 2024): ₹", round(avg_earning_per_mile, 2))
+
+```
+
+```{python}
+# Question 3 of 3
+# Identify the combination of rider count and total distance that results in the highest average driver earnings per UberPool ride between July 1st and September 30th, 2024. This analysis directly recommends optimal trip combination strategies to maximize driver earnings.
+
+ # Solution
+# Filter UberPool rides between July 1 and Sept 30, 2024
+filtered_df = fct_trips[
+    (fct_trips['ride_type'] == "UberPool") &
+    (fct_trips['trip_date'] >= '2024-07-01') & 
+    (fct_trips['trip_date'] <= '2024-09-30')
+]
+
+# Group by rider count and total distance, then calculate average earnings
+grouped_df = filtered_df.groupby(['rider_count', 'total_distance'])['total_earnings'].mean().reset_index()
+
+# Sort by average earnings descending
+sorted_df = grouped_df.sort_values(by='total_earnings', ascending=False)
+
+# Display top combination
+top_combo = sorted_df.head(1)
+print("Top rider count + distance combo for highest avg earnings:")
+print(top_combo)
+
+```
