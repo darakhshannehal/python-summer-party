@@ -2,6 +2,10 @@
 
 [Python Summer Party](https://www.interviewmaster.ai/python-party/home/), a 15-day coding challenge organized by **Interview Master** in collaboration with **DataCamp**.
 
+
+<img width="700" height="8500" alt="image" src="https://github.com/user-attachments/assets/03b0327e-a123-4859-9285-46c094d51e06" />
+
+
 ### Daily Learning Snapshot
 
 | Day | Topic | Library used | Difficulty Level |
@@ -20,4 +24,4 @@
 | 12 | Walmart: E-commerce Returns Customer Segmentation Model | pandas (datetime conversion, boolean filtering, MultiIndex creation, pd.Grouper, .size() ) | Medium |
 | 13 | Shake Shack: New Milkshake Flavor Selection for Launch | pandas (drop_duplicates, groupby, mean, map, difference calculation) | Medium |
 | 14 | Starbucks: Loyalty Program's Impact on Transaction Patterns | pandas (merge, datetime filtering, groupby mean, percentage difference calculation) | Hard |
-| 15 |  |  |  |
+| 15 | Uber: UberPool Driver Earnings Optimization Strategies | pandas (date filtering, groupby, mean aggregation, sorting) | Hard |
