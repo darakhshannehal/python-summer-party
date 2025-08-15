@@ -4,17 +4,21 @@ format: html
 ---
 
 # You are a Business Analyst on the Uber Pool Product Team working to optimize driver compensation. The team aims to understand how trip characteristics impact driver earnings. Your goal is to develop data-driven recommendations that maximize driver earnings potential.
+
 ```{python}
 
 # Question 1 of 3
 # What is the average driver earnings per completed UberPool ride with more than two riders between July 1st and September 30th, 2024? This analysis will help isolate trips that meet specific rider thresholds to understand their impact on driver earnings.
 
- # Solution
+# Solution
 # Libraries
 import pandas as pd
 
 # Load Data
 fct_trips = pd.read_csv('day15_fct_trips.csv')
+
+# Convert `trip_date` to datetime
+fct_trips['trip_date'] = pd.to_datetime(fct_trips['trip_date'])
 
 # Filter UberPool rides with more than 2 riders between July 1 and Sept 30, 2024
 filtered_df = fct_trips[
