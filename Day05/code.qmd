@@ -3,17 +3,11 @@ title: "Switch 2 Pre-sales Demand Forecasting"
 format: html
 ---
 
-```{python}
-
 # You are a Product Analyst working with the Nintendo Switch 2 pre-sales team to analyze regional pre-order patterns and customer segmentation. Your team needs to understand how different demographics influence pre-sale volumes across regions. You will leverage historical pre-sale transaction data to extract meaningful insights that can guide marketing strategies.
 
-# Note: pandas and numpy are already imported as pd and np
-# The following tables are loaded as pandas DataFrames with the same names: pre_sale_data
-# Please print your final result or dataframe
-# pre_sale_data(customer_id, region, demographic_group, pre_order_date, pre_order_quantity)
+```{python}
 
 # Question 1 of 3
-
 # What percentage of records have missing values in at least one column? Handle the missing values, so that we have a cleaned dataset to work with.
 
 # Solution 
@@ -27,24 +21,16 @@ pre_sale_data = pd.read_csv('day05_pre_sale_data.csv')
 pre_sale_data['pre_order_date'] = pd.to_datetime(pre_sale_data['pre_order_date'])
 
 # Percentage of records with missing values
-missing_rows = pre_sale_data.isnull().any(axis=1)
-missing_count = missing_rows.sum()
+missing_count = pre_sale_data.isnull().any(axis=1).sum()
 total_count = len(pre_sale_data)
 missing_percentage = (missing_count / total_count) * 100
 print(f"Percentage of records with missing values: {missing_percentage:.2f}%")
 
-# Drop rows where critical fields are missing
-pre_sale_data.dropna(subset=['customer_id', 'region', 'pre_order_quantity'], inplace=True)
+# Drop rows with missing critical fields
+pre_sale_data.dropna(subset=['customer_id', 'region', 'pre_order_quantity', 'pre_order_date'], inplace=True)
 
-# Fill less critical missing values
-pre_sale_data['demographic_group'].fillna('Unknown', inplace=True)
-pre_sale_data['pre_order_date'].fillna('Unknown', inplace=True)  # Or use a placeholder date
-
-# Remove duplicate records
-duplicate_count = pre_sale_data.duplicated().sum()
-print(f"Number of duplicate records: {duplicate_count}")
-pre_sale_data.drop_duplicates(inplace=True)
-
+# Fill missing demographic group 
+pre_sale_data['demographic_group'] = pre_sale_data['demographic_group'].fillna('Unknown')
 
 ```
 
@@ -73,6 +59,7 @@ total_pre_sale_per_month = grouped_df.pivot_table(
 
 # Preview the final result
 print(total_pre_sale_per_month.head())
+
 ```
 
 ```{python}
@@ -102,4 +89,5 @@ merged['predicted_sep_2024'] = merged['pre_order_quantity_aug'] * (1 + merged['g
 # Final output: region and predicted quantity
 prediction_df = merged[['region', 'predicted_sep_2024']]
 print(prediction_df)
+
 ```
